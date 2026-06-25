@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fernando Pichardo | Shitases y Tradición</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Variables de colores festivos (Neón) */
+        :root {
+            --bg-color: #0d0e15;
+            --neon-pink: #ff007a;
+            --neon-cyan: #00f0ff;
+            --neon-yellow: #ffea00;
+            --text-main: #ffffff;
+            --text-muted: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Canvas para las luces de fondo */
+        #party-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none; /* Permite hacer clic a través del canvas */
+        }
+
+        /* Contenedor Principal */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* Perfil y Avatar */
+        .profile-container {
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            border: 3px solid var(--neon-pink);
+            box-shadow: 0 0 25px rgba(255, 0, 122, 0.6);
+            animation: pulseGlow 2.5s infinite alternate;
+            
+            /* Solución: Estas líneas hacen que la imagen se adapte perfectamente al círculo */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: colorShift 5s infinite linear;
+        }
+
+        .bio {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.6;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+        }
+
+        /* Botones / Enlaces */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 16px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Colores específicos por red social al hacer hover */
+        .link-btn.facebook:hover {
+            border-color: #1877F2;
+            box-shadow: 0 0 20px rgba(24, 119, 242, 0.7);
+            background: rgba(24, 119, 242, 0.1);
+        }
+
+        .link-btn.tiktok:hover {
+            border-color: var(--neon-pink);
+            box-shadow: -5px 5px 20px rgba(255, 0, 80, 0.5), 5px -5px 20px rgba(0, 242, 254, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-btn.youtube:hover {
+            border-color: #FF0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .link-btn i {
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Efecto de "vibración" musical al pasar el ratón */
+        .link-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            animation: bassVibrate 0.3s ease-in-out infinite alternate;
+        }
+
+        .link-btn:hover i {
+            transform: scale(1.2);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+        }
+
+        /* --- Animaciones Keyframes --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 10px rgba(255, 0, 122, 0.5); }
+            to { box-shadow: 0 0 30px rgba(255, 0, 122, 0.9), 0 0 50px rgba(0, 240, 255, 0.4); }
+        }
+
+        @keyframes colorShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes bassVibrate {
+            0% { transform: translateY(-3px) scale(1.02) rotate(0deg); }
+            25% { transform: translateY(-3px) scale(1.02) rotate(-0.5deg); }
+            50% { transform: translateY(-3px) scale(1.02) rotate(0.5deg); }
+            75% { transform: translateY(-3px) scale(1.02) rotate(-0.5deg); }
+            100% { transform: translateY(-3px) scale(1.02) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="party-canvas"></canvas>
+
+    <div class="container">
+        <div class="profile-container">
+            <div class="avatar" style="background-image: url('avatar1.jpeg');"></div>
+            <h1 class="name">Fernando Pichardo</h1>
+            <p class="bio">
+                Me apasiona capturar la esencia, la música y la energía desbordante de las shitases y fiestas patronales en San Juan del Río. Si quieres vivir la fiesta y el color de nuestras tradiciones a través de mi lente, ¡acompáñame en mis redes!
+            </p>
+        </div>
+
+        <div class="links-container">
+            <a href="https://www.facebook.com/share/1E8k3R1obS/" target="_blank" class="link-btn facebook">
+                <i class="fa-brands fa-facebook-f"></i> Facebook
+            </a>
+            
+            <a href="https://www.tiktok.com/@fernandopichardo57?_r=1&_t=ZS-97VnRzBHlEf" target="_blank" class="link-btn tiktok">
+                <i class="fa-brands fa-tiktok"></i> TikTok
+            </a>
+            
+            <a href="https://youtube.com/@fernandopichardo6763?si=DDd7in19zMqxDk7Q" target="_blank" class="link-btn youtube">
+                <i class="fa-brands fa-youtube"></i> YouTube
+            </a>
+        </div>
+
+        <div class="footer">
+            Viviendo la tradición • San Juan del Río
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('party-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particlesArray = [];
+        const colors = ['#ff007a', '#00f0ff', '#ffea00', '#ffffff']; // Colores neón festivos
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 4 + 1; // Tamaño aleatorio
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * -2 - 0.5; // Siempre suben ligeramente (como chispas/globos)
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Efecto de parpadeo ligero
+                if (Math.random() > 0.95) this.opacity = Math.random() * 0.8 + 0.2;
+
+                // Si salen de la pantalla, vuelven a aparecer abajo
+                if (this.y < 0 || this.x < 0 || this.x > canvas.width) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.globalAlpha = 1.0; // Reset
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 70; i++) { // Cantidad de partículas
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animate() {
+            // Limpia el canvas en cada frame pero deja un rastro difuminado para efecto de movimiento
+            ctx.fillStyle = 'rgba(13, 14, 21, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
